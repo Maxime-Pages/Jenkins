@@ -15,7 +15,9 @@ pipeline {
             }
             steps {
                 unstash 'stuff'
-                sh 'ls -R ${WORKSPACE}' 
+                sh 'ls -R ${WORKSPACE}'
+                sh 'virtualenv .venv'
+                sh 'source .venv/bin/activate'
                 sh 'pip install -r back/requirements.txt'
             }
         }
