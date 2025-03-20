@@ -1,9 +1,17 @@
 pipeline {
-    agent any
+    agent
     stages {
-        stage('Build') {
+        stage('Checkout to correct Branch') {
             steps {
-                echo 'Building..'
+                git branch 'dev', url: 'https://github.com/Maxime-Pages/Jenkins'
+            }
+        }
+        stage('Build Backend') {
+            agent {
+                label 'jpydock'
+            }
+            steps {
+                sh 'pip install -r requirements.txt'
             }
         }
         stage('Test') {

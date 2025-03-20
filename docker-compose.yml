@@ -1,4 +1,17 @@
 services:
+  jenkins_pydock:
+    image: jpydock
+    container_name: jpydock
+    restart: unless-stopped
+    depends_on:
+      - jenkins
+    environment:
+      - JENKINS_URL=http://jenkins:8080
+      - JENKINS_AGENT_NAME=jpydock
+      - JENKINS_SECRET=3fb4fc54731917754cfe9314d25ef345896b0ac0939ea7fbdcfca31007e3401f
+      - JENKINS_AGENT_WORKDIR=/home/jenkins/
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
   jenkins:
     image: jenkins/jenkins:lts
     container_name: jenkins
