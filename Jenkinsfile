@@ -5,6 +5,8 @@ pipeline {
             agent any
             steps {
                 git branch: 'dev', url: 'https://github.com/Maxime-Pages/Jenkins'
+                sh 'ls -R ${WORKSPACE}'
+                stash name: 'stuff', includes :'**'
             }
         }
         stage('Build Backend') {
@@ -12,7 +14,9 @@ pipeline {
                 label 'jpydock'
             }
             steps {
-                sh 'pip install -r ./back/requirements.txt'
+                unstash 'stuff'
+                sh 'ls -R ${WORKSPACE}' 
+                sh 'pip install -r back/requirements.txt'
             }
         }
         stage('Test') {
