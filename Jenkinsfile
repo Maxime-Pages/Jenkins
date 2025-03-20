@@ -4,7 +4,7 @@ pipeline {
         stage('Checkout to correct Branch') {
             agent any
             steps {
-                git branch 'dev', url: 'https://github.com/Maxime-Pages/Jenkins'
+                git branch: 'dev', url: 'https://github.com/Maxime-Pages/Jenkins'
             }
         }
         stage('Build Backend') {
