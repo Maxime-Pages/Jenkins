@@ -20,9 +20,16 @@ pipeline {
             }
         }
         stage('Test') {
-            agent any
+            agent {
+                label 'jpytest'
+            }
             steps {
+                unstash 'stuff'
+                sh 'ls -R ${WORKSPACE}'
+                sh 'pip install -r back/requirements.txt'
+                sh 'pip install pytest'
                 echo 'Testing..'
+                sh 'pytest'
             }
         }
         stage('Deploy') {

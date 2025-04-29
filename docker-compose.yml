@@ -12,6 +12,19 @@ services:
       - JENKINS_AGENT_WORKDIR=/home/jenkins/
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+  jenkins_pytest:
+    image: jpytest
+    container_name: jpytest
+    restart: unless-stopped
+    depends_on:
+      - jenkins
+    environment:
+      - JENKINS_URL=http://jenkins:8080
+      - JENKINS_AGENT_NAME=jpytest
+      - JENKINS_SECRET=fb71574dda9a8c78ec447ce25f00c54919fb88469fc288003b01a2cd871195ad
+      - JENKINS_AGENT_WORKDIR=/home/jenkins/
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
   jenkins:
     image: jenkins/jenkins:lts
     container_name: jenkins
