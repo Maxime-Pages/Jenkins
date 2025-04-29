@@ -28,5 +28,19 @@ def get_data():
     connection.close()
     return jsonify(data)
 
+@app.route('/fibonacci/<int:n>')
+def fibonacci(n):
+    if n < 0:
+        return -1
+    elif n == 0:
+        return 0
+    elif n == 1:
+        return 1
+    else:
+        a, b = 0, 1
+        for _ in range(2, n + 1):
+            a, b = b, a + b
+        return b
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3000)
