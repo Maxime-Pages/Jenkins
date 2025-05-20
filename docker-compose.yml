@@ -25,6 +25,34 @@ services:
       - JENKINS_AGENT_WORKDIR=/home/jenkins/
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+
+  sonarqube:
+    image: sonarqube:community
+    depends_on:
+      - sonar-db
+    container_name: sonarqube
+    ports:
+      - "9000:9000"
+    volumes:
+      - ../sonarqube:/opt/sonarqube/data
+      - ../sonarqube/extensions:/opt/sonarqube/extensions
+    restart: unless-stopped
+    environment:
+      - SONAR_JDBC_URL=jdbc:postgresql://sonar-db:5432/sonarqube
+      - SONAR_JDBC_USERNAME=sonar
+      - SONAR_JDBC_PASSWORD=sonar
+
+  sonar-db:
+    image: postgres:13
+    container_name: sonar-db
+    volumes:
+      - ../postgres:/var/lib/postgresql/data
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=sonar
+      - POSTGRES_PASSWORD=sonar
+      - POSTGRES_DB=sonarqube
+
   jenkins:
     image: jenkins/jenkins:lts
     container_name: jenkins
