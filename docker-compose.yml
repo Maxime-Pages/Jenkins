@@ -25,33 +25,19 @@ services:
       - JENKINS_AGENT_WORKDIR=/home/jenkins/
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-
-  sonarqube:
-    image: sonarqube:community
+  jenkins_pyprod:
+    image: pyprod
+    container_name: pyprod
+    restart: unless-stopped
     depends_on:
-      - sonar-db
-    container_name: sonarqube
-    ports:
-      - "9000:9000"
-    volumes:
-      - ../sonarqube:/opt/sonarqube/data
-      - ../sonarqube/extensions:/opt/sonarqube/extensions
-    restart: unless-stopped
+      - jenkins
     environment:
-      - SONAR_JDBC_URL=jdbc:postgresql://sonar-db:5432/sonarqube
-      - SONAR_JDBC_USERNAME=sonar
-      - SONAR_JDBC_PASSWORD=sonar
-
-  sonar-db:
-    image: postgres:13
-    container_name: sonar-db
+      - JENKINS_URL=http://jenkins:8080
+      - JENKINS_AGENT_NAME=pyprod
+      - JENKINS_SECRET=8a11b5b6c0ce5a3b20abf9c80f4a03305fffe07d8bb4f00582cb505f567901fd
+      - JENKINS_AGENT_WORKDIR=/home/jenkins/
     volumes:
-      - ../postgres:/var/lib/postgresql/data
-    restart: unless-stopped
-    environment:
-      - POSTGRES_USER=sonar
-      - POSTGRES_PASSWORD=sonar
-      - POSTGRES_DB=sonarqube
+      - /var/run/docker.sock:/var/run/docker.sock
 
   jenkins:
     image: jenkins/jenkins:lts

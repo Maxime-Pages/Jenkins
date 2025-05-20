@@ -33,9 +33,15 @@ pipeline {
             }
         }
         stage('Deploy') {
-            agent any
+            agent {
+                label 'pyprod'
+            }
             steps {
-                echo 'Deploying....'
+                unstash 'stuff'
+                sh 'ls -R ${WORKSPACE}'
+                sh 'pip install -r back/requirements.txt'
+                echo 'Deploying..'
+                sh 'python3 back/main.py'
             }
         }
     }
